@@ -56,7 +56,7 @@ model.add(LSTM(150, return_sequences=True))
 model.add(TimeDistributed(Dense(n_features, activation='softmax')))
 
 # Summary
-print (model.summary())
+print(model.summary())
 
 # compile
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['acc'])
@@ -65,4 +65,15 @@ for epoch in range(5000):
 	X, y = get_pair(n_timesteps_in, n_timesteps_out, n_features)
 	model.fit(X, y)
 
+# Evaluate
+total, correct = 100, 0
+for _ in range(total):
+	X, y = get_pair(n_timesteps_in, n_timesteps_out, n_features)
+	preds = model.predict(X, verbose=0)
 
+	print('Expected = {}, Predicted = {}'.format(one_hot_decode(y[0]), one_hot_decode(preds[0])))
+
+	if np.array_equal(one_hot_decode(y[0]), one_hot_decode(preds[0])):
+		correct += 1
+
+print('Accuracy  = {}'.format(correct * 100 / total))

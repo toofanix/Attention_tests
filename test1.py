@@ -23,7 +23,7 @@ def one_hot_decode(encoded_seq: np.array) -> list:
 	return [np.argmax(vector) for vector in encoded_seq]
 
 
-def get_pair(n_in: int, n_out: int, n_unique: int) -> typing.Any:
+def get_pair(n_in: int, n_out: int, n_unique: int) -> typing.Tuple[np.array, np.array]:
 	# generate random sequence
 	sequence_in = generate_sequence(n_in, n_unique)
 	sequence_out = sequence_in[:n_out] + [0 for _ in range(n_in - n_out)]
@@ -33,5 +33,9 @@ def get_pair(n_in: int, n_out: int, n_unique: int) -> typing.Any:
 	y = one_hot_encode(sequence_out, n_unique)
 
 	# reshape as 3D
+	X = X.reshape((1, X.shape[0], X.shape[1]))
+	y = y.reshape((1, y.shape[0], y.shape[1]))
 
-	return sequence_out
+	return (X, y)
+
+

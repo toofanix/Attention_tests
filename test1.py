@@ -38,4 +38,7 @@ def get_pair(n_in: int, n_out: int, n_unique: int) -> typing.Tuple[np.array, np.
 
 	return (X, y)
 
+X, y = get_pair(5, 2, 50)
+print(X.shape, y.shape)
+print('X = {}, y = {}'.format(one_hot_decode(X[0]), one_hot_decode(y[0])))
 

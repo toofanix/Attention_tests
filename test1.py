@@ -2,6 +2,9 @@ from random import randint
 import numpy as np
 import typing
 
+from keras.layers import LSTM, Dense, RepeatVector, TimeDistributed
+from keras.models import Sequential
+
 
 def generate_sequence(length: int, n_unique: int) -> list:
 	return [randint(0, n_unique - 1) for _ in range(length)]
@@ -38,7 +41,22 @@ def get_pair(n_in: int, n_out: int, n_unique: int) -> typing.Tuple[np.array, np.
 
 	return (X, y)
 
+
 X, y = get_pair(5, 2, 50)
-print(X.shape, y.shape)
-print('X = {}, y = {}'.format(one_hot_decode(X[0]), one_hot_decode(y[0])))
+
+n_features = 50
+n_timesteps_in = 5
+n_timesteps_out = 2
+
+# model architecture
+model = Sequential()
+model.add(LSTM(150, input_shape=(n_timesteps_in, n_features)))
+model.add(RepeatVector(n_timesteps_in))
+model.add(LSTM(150, return_sequences=True))
+model.add(TimeDistributed(Dense(n_features, activation='softmax')))
+
+# Summary
+print (model.summary())
+# compile
+model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['acc'])
 

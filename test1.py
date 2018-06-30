@@ -57,6 +57,12 @@ model.add(TimeDistributed(Dense(n_features, activation='softmax')))
 
 # Summary
 print (model.summary())
+
 # compile
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['acc'])
+
+for epoch in range(5000):
+	X, y = get_pair(n_timesteps_in, n_timesteps_out, n_features)
+	model.fit(X, y)
+
 

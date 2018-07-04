@@ -8,6 +8,7 @@ from keras.models import Sequential
 from keras import backend as K
 from keras import regularizers, constraints, initializers, activations
 from keras.layers.recurrent import Recurrent
+from keras.engine import InputSpec
 
 
 def tfPrint(d, T): return tf.Print(input_=T, data=[T, tf.shape(T)], message=d)
@@ -303,3 +304,16 @@ class AttentionDecoder(Recurrent):
                                initializer=self.bias_initializer,
                                regularizer=self.bias_regularizer,
                                constraint=self.bias_constraint)
+
+    """
+    For creating the initial states
+    """
+    self.W_s = self.add_weight(shape=(self.input_dim, self.units),
+                               name='W_s',
+                               initializer=self.recurrent_initializer,
+                               regularizer=self.recurrent_regularizer,
+                               constraint=self.recurrent_constraint)
+
+    self.input_spec = [
+        InputSpec(shape=(self.batch_size, self.timesteps, self.input_dim))]
+    self.built = True

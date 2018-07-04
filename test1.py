@@ -182,138 +182,137 @@ class AttentionDecoder(Recurrent):
         if self.stateful:
             super(AttentionDecoder, self).reset_states()
 
-    self.states = [None, None]
+        self.states = [None, None]
+        """
+        Matrices for creating the context vector
+        """
 
-    """
-    Matrices for creating the context vector
-    """
+        self.V_a = self.add_weight(shape=(self.units,),
+                                   name='V_a',
+                                   initializer=self.kernel_initizalizer,
+                                   regularizer=self.kernel_regularizer,
+                                   constraint=self.kernel_constraint)
+        self.W_a = self.add_weight(shape=(self.units, self.units),
+                                   name='W_a',
+                                   initializer=self.kernel_initializer,
+                                   regularizer=self.kernel_regularizer,
+                                   constraint=self.kernel_constraint)
+        self.U_a = self.add_weight(shape=(self.input_dim, self.units),
+                                   name='U_a',
+                                   initializer=self.kernel_initializer,
+                                   regularizer=self.kernel_regularizer,
+                                   constraint=self.kernel_constraint)
+        self.b_a = self.add_weight(shape=(self.units),
+                                   name='b_a',
+                                   initializer=self.bias_initializer,
+                                   regularizer=self.bias_regularizer,
+                                   constraint=self.bias_constraint)
 
-    self.V_a = self.add_weight(shape=(self.units,),
-                               name='V_a',
-                               initializer=self.kernel_initizalizer,
-                               regularizer=self.kernel_regularizer,
-                               constraint=self.kernel_constraint)
-    self.W_a = self.add_weight(shape=(self.units, self.units),
-                               name='W_a',
-                               initializer=self.kernel_initializer,
-                               regularizer=self.kernel_regularizer,
-                               constraint=self.kernel_constraint)
-    self.U_a = self.add_weight(shape=(self.input_dim, self.units),
-                               name='U_a',
-                               initializer=self.kernel_initializer,
-                               regularizer=self.kernel_regularizer,
-                               constraint=self.kernel_constraint)
-    self.b_a = self.add_weight(shape=(self.units),
-                               name='b_a',
-                               initializer=self.bias_initializer,
-                               regularizer=self.bias_regularizer,
-                               constraint=self.bias_constraint)
+        """
+        Matrices for the r (reset) gate
+        """
+        self.C_r = self.add_weight(shape=(self.input_dim, self.units),
+                                   name='C_r',
+                                   initializer=self.recurrent_initializer,
+                                   regularizer=self.recurrent_regularizer,
+                                   constraint=self.recurrent_constraint)
+        self.U_r = self.add_weight(shape=(self.units, self.units),
+                                   name='U_r',
+                                   initializer=self.recurrent_initializer,
+                                   regularizer=self.recurrent_regularizer,
+                                   constraint=self.recurrent_constraint)
+        self.W_r = self.add_weight(shape=(self.output_dim, self.units),
+                                   name='W_r',
+                                   initializer=self.recurrent_initializer,
+                                   regularizer=self.recurrent_regularizer,
+                                   constraint=self.recurrent_constraint)
+        self.b_r = self.add_weight(shape=(self.units, ),
+                                   name='b_r',
+                                   initializer=self.bias_initializer,
+                                   regularizer=self.bias_regularizer,
+                                   constraint=self.bias_constraint)
 
-    """
-    Matrices for the r (reset) gate
-    """
-    self.C_r = self.add_weight(shape=(self.input_dim, self.units),
-                               name='C_r',
-                               initializer=self.recurrent_initializer,
-                               regularizer=self.recurrent_regularizer,
-                               constraint=self.recurrent_constraint)
-    self.U_r = self.add_weight(shape=(self.units, self.units),
-                               name='U_r',
-                               initializer=self.recurrent_initializer,
-                               regularizer=self.recurrent_regularizer,
-                               constraint=self.recurrent_constraint)
-    self.W_r = self.add_weight(shape=(self.output_dim, self.units),
-                               name='W_r',
-                               initializer=self.recurrent_initializer,
-                               regularizer=self.recurrent_regularizer,
-                               constraint=self.recurrent_constraint)
-    self.b_r = self.add_weight(shape=(self.units, ),
-                               name='b_r',
-                               initializer=self.bias_initializer,
-                               regularizer=self.bias_regularizer,
-                               constraint=self.bias_constraint)
+        """
+        Matrices for the z (update) gate
+        """
+        self.C_z = self.add_weight(shape=(self.input_dim, self.units),
+                                   name='C_z',
+                                   initializer=self.recurrent_initializer,
+                                   regularizer=self.recurrent_regularizer,
+                                   constraint=self.recurrent_constraint)
+        self.U_z = self.add_weight(shape=(self.units, self.units),
+                                   name='U_z',
+                                   initializer=self.recurrent_initializer,
+                                   regularizer=self.recurrent_regularizer,
+                                   constraint=self.recurrent_constraint)
+        self.W_z = self.add_weight(shape=(self.output_dim, self.units),
+                                   name='W_z',
+                                   initializer=self.recurrent_initializer,
+                                   regularizer=self.recurrent_regularizer,
+                                   constraint=self.recurrent_constraint)
+        self.b_z = self.add_weight(shape=(self.units, ),
+                                   name='b_z',
+                                   initializer=self.recurrent_initializer,
+                                   regularizer=self.recurrent_regularizer,
+                                   constraint=self.recurrent_constraint)
 
-    """
-    Matrices for the z (update) gate
-    """
-    self.C_z = self.add_weight(shape=(self.input_dim, self.units),
-                               name='C_z',
-                               initializer=self.recurrent_initializer,
-                               regularizer=self.recurrent_regularizer,
-                               constraint=self.recurrent_constraint)
-    self.U_z = self.add_weight(shape=(self.units, self.units),
-                               name='U_z',
-                               initializer=self.recurrent_initializer,
-                               regularizer=self.recurrent_regularizer,
-                               constraint=self.recurrent_constraint)
-    self.W_z = self.add_weight(shape=(self.output_dim, self.units),
-                               name='W_z',
-                               initializer=self.recurrent_initializer,
-                               regularizer=self.recurrent_regularizer,
-                               constraint=self.recurrent_constraint)
-    self.b_z = self.add_weight(shape=(self.units, ),
-                               name='b_z',
-                               initializer=self.recurrent_initializer,
-                               regularizer=self.recurrent_regularizer,
-                               constraint=self.recurrent_constraint)
+        """
+        Matrices of proposal
+        """
+        self.C_p = self.add_weight(shape=(self.input_dim, self.units),
+                                   name='C_p',
+                                   initializer=self.recurrent_initializer,
+                                   regularizer=self.recurrent_regularizer,
+                                   constraint=self.recurrent_constraint)
+        self.U_p = self.add_weight(shape=(self.units, self.units),
+                                   name='U_p',
+                                   initializer=self.recurrent_initializer,
+                                   regularizer=self.recurrent_regularizer,
+                                   constraint=self.recurrent_constraint)
+        self.W_p = self.add_weight(shape=(self.output_dim, self.units),
+                                   name='W_p',
+                                   initializer=self.recurrent_initializer,
+                                   regularizer=self.recurrent_regularizer,
+                                   constraint=self.recurrent_constraint)
+        self.b_p = self.add_weight(shape=(self.units, ),
+                                   name='b_p',
+                                   initializer=self.bias_initializer,
+                                   regularizer=self.bias_regularizer,
+                                   constraint=self.bias_constraint)
 
-    """
-    Matrices of proposal
-    """
-    self.C_p = self.add_weight(shape=(self.input_dim, self.units),
-                               name='C_p',
-                               initializer=self.recurrent_initializer,
-                               regularizer=self.recurrent_regularizer,
-                               constraint=self.recurrent_constraint)
-    self.U_p = self.add_weight(shape=(self.units, self.units),
-                               name='U_p',
-                               initializer=self.recurrent_initializer,
-                               regularizer=self.recurrent_regularizer,
-                               constraint=self.recurrent_constraint)
-    self.W_p = self.add_weight(shape=(self.output_dim, self.units),
-                               name='W_p',
-                               initializer=self.recurrent_initializer,
-                               regularizer=self.recurrent_regularizer,
-                               constraint=self.recurrent_constraint)
-    self.b_p = self.add_weight(shape=(self.units, ),
-                               name='b_p',
-                               initializer=self.bias_initializer,
-                               regularizer=self.bias_regularizer,
-                               constraint=self.bias_constraint)
+        """
+        Matrices for making final prediction vector
+        """
+        self.C_o = self.add_weight(shape=(self.input_dim, self.output_dim),
+                                   name='C_o',
+                                   initializer=self.recurrent_initializer,
+                                   regularizer=self.recurrent_regularizer,
+                                   constraint=self.recurrent_constraint)
+        self.U_o = self.add_weight(shape=(self.units, self.output_dim),
+                                   name='U_o',
+                                   initializer=self.recurrent_initializer,
+                                   regularizer=self.recurrent_regularizer,
+                                   constraint=self.recurrent_constraint)
+        self.W_o = self.add_weight(shape=(self.output_dim, self.output_dim),
+                                   name='W_o',
+                                   initializer=self.recurrent_initializer,
+                                   regularizer=self.recurrent_regularizer,
+                                   constraint=self.recurrent_constraint)
+        self.b_o = self.add_weight(shape=(self.output_dim),
+                                   name='b_o',
+                                   initializer=self.bias_initializer,
+                                   regularizer=self.bias_regularizer,
+                                   constraint=self.bias_constraint)
 
-    """
-    Matrices for making final prediction vector
-    """
-    self.C_o = self.add_weight(shape=(self.input_dim, self.output_dim),
-                               name='C_o',
-                               initializer=self.recurrent_initializer,
-                               regularizer=self.recurrent_regularizer,
-                               constraint=self.recurrent_constraint)
-    self.U_o = self.add_weight(shape=(self.units, self.output_dim),
-                               name='U_o',
-                               initializer=self.recurrent_initializer,
-                               regularizer=self.recurrent_regularizer,
-                               constraint=self.recurrent_constraint)
-    self.W_o = self.add_weight(shape=(self.output_dim, self.output_dim),
-                               name='W_o',
-                               initializer=self.recurrent_initializer,
-                               regularizer=self.recurrent_regularizer,
-                               constraint=self.recurrent_constraint)
-    self.b_o = self.add_weight(shape=(self.output_dim),
-                               name='b_o',
-                               initializer=self.bias_initializer,
-                               regularizer=self.bias_regularizer,
-                               constraint=self.bias_constraint)
+        """
+        For creating the initial states
+        """
+        self.W_s = self.add_weight(shape=(self.input_dim, self.units),
+                                   name='W_s',
+                                   initializer=self.recurrent_initializer,
+                                   regularizer=self.recurrent_regularizer,
+                                   constraint=self.recurrent_constraint)
 
-    """
-    For creating the initial states
-    """
-    self.W_s = self.add_weight(shape=(self.input_dim, self.units),
-                               name='W_s',
-                               initializer=self.recurrent_initializer,
-                               regularizer=self.recurrent_regularizer,
-                               constraint=self.recurrent_constraint)
-
-    self.input_spec = [
-        InputSpec(shape=(self.batch_size, self.timesteps, self.input_dim))]
-    self.built = True
+        self.input_spec = [
+            InputSpec(shape=(self.batch_size, self.timesteps, self.input_dim))]
+        self.built = True

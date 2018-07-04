@@ -231,3 +231,29 @@ class AttentionDecoder(Recurrent):
                                initializer=self.bias_initializer,
                                regularizer=self.bias_regularizer,
                                constraint=self.bias_constraint)
+
+    """
+    Matrices for the z (update) gate
+    """
+    self.C_z = self.add_weight(shape=(self.input_dim, self.units),
+                               name='C_z',
+                               initializer=self.recurrent_initializer,
+                               regularizer=self.recurrent_regularizer,
+                               constraint=self.recurrent_constraint)
+    self.U_z = self.add_weight(shape=(self.units, self.units),
+                               name='U_z',
+                               initializer=self.recurrent_initializer,
+                               regularizer=self.recurrent_regularizer,
+                               constraint=self.recurrent_constraint)
+    self.W_z = self.add_weight(shape=(self.output_dim, self.units),
+                               name='W_z',
+                               initializer=self.recurrent_initializer,
+                               regularizer=self.recurrent_regularizer,
+                               constraint=self.recurrent_constraint)
+    self.b_z = self.add_weight(shape=(self.units, ),
+                               name='b_z',
+                               initializer=self.recurrent_initializer,
+                               regularizer=self.recurrent_regularizer,
+                               constraint=self.recurrent_constraint)
+
+                               

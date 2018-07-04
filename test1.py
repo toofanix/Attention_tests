@@ -183,6 +183,10 @@ class AttentionDecoder(Recurrent):
 
     self.states = [None, None]
 
+    """
+    Matrices for creating the context vector
+    """
+
     self.V_a = self.add_weight(shape=(self.units,),
                                name='V_a',
                                initializer=self.kernel_initizalizer,
@@ -200,6 +204,30 @@ class AttentionDecoder(Recurrent):
                                constraint=self.kernel_constraint)
     self.b_a = self.add_weight(shape=(self.units),
                                name='b_a',
+                               initializer=self.bias_initializer,
+                               regularizer=self.bias_regularizer,
+                               constraint=self.bias_constraint)
+
+    """
+    Matrices for the r (reset) gate
+    """
+    self.C_r = self.add_weight(shape=(self.input_dim, self.units),
+                               name='C_r',
+                               initializer=self.recurrent_initializer,
+                               regularizer=self.recurrent_regularizer,
+                               constraint=self.recurrent_constraint)
+    self.U_r = self.add_weight(shape=(self.units, self.units),
+                               name='U_r',
+                               initializer=self.recurrent_initializer,
+                               regularizer=self.recurrent_regularizer,
+                               constraint=self.recurrent_constraint)
+    self.W_r = self.add_weight(shape=(self.output_dim, self.units),
+                               name='W_r',
+                               initializer=self.recurrent_initializer,
+                               regularizer=self.recurrent_regularizer,
+                               constraint=self.recurrent_constraint)
+    self.b_r = self.add_weight(shape=(self.units, ),
+                               name='b_r',
                                initializer=self.bias_initializer,
                                regularizer=self.bias_regularizer,
                                constraint=self.bias_constraint)

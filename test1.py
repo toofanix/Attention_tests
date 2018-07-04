@@ -260,22 +260,46 @@ class AttentionDecoder(Recurrent):
     Matrices of proposal
     """
     self.C_p = self.add_weight(shape=(self.input_dim, self.units),
-    name='C_p',
-    initializer=self.recurrent_initializer,
-    regularizer=self.recurrent_regularizer,
-    constraint=self.recurrent_constraint)
+                               name='C_p',
+                               initializer=self.recurrent_initializer,
+                               regularizer=self.recurrent_regularizer,
+                               constraint=self.recurrent_constraint)
     self.U_p = self.add_weight(shape=(self.units, self.units),
-    name='U_p',
-    initializer=self.recurrent_initializer,
-    regularizer=self.recurrent_regularizer,
-    constraint=self.recurrent_constraint)
+                               name='U_p',
+                               initializer=self.recurrent_initializer,
+                               regularizer=self.recurrent_regularizer,
+                               constraint=self.recurrent_constraint)
     self.W_p = self.add_weight(shape=(self.output_dim, self.units),
-    name='W_p',
-    initializer=self.recurrent_initializer,
-    regularizer=self.recurrent_regularizer,
-    constraint=self.recurrent_constraint)
-    self.b_p=self.add_weight(shape=(self.units, ),
-    name='b_p',
-    initializer=self.bias_initializer,
-    regularizer=self.bias_regularizer,
-    constraint=self.bias_constraint)
+                               name='W_p',
+                               initializer=self.recurrent_initializer,
+                               regularizer=self.recurrent_regularizer,
+                               constraint=self.recurrent_constraint)
+    self.b_p = self.add_weight(shape=(self.units, ),
+                               name='b_p',
+                               initializer=self.bias_initializer,
+                               regularizer=self.bias_regularizer,
+                               constraint=self.bias_constraint)
+
+    """
+    Matrices for making final prediction vector
+    """
+    self.C_o = self.add_weight(shape=(self.input_dim, self.output_dim),
+                               name='C_o',
+                               initializer=self.recurrent_initializer,
+                               regularizer=self.recurrent_regularizer,
+                               constraint=self.recurrent_constraint)
+    self.U_o = self.add_weight(shape=(self.units, self.output_dim),
+                               name='U_o',
+                               initializer=self.recurrent_initializer,
+                               regularizer=self.recurrent_regularizer,
+                               constraint=self.recurrent_constraint)
+    self.W_o = self.add_weight(shape=(self.output_dim, self.output_dim),
+                               name='W_o',
+                               initializer=self.recurrent_initializer,
+                               regularizer=self.recurrent_regularizer,
+                               constraint=self.recurrent_constraint)
+    self.b_o = self.add_weight(shape=(self.output_dim),
+                               name='b_o',
+                               initializer=self.bias_initializer,
+                               regularizer=self.bias_regularizer,
+                               constraint=self.bias_constraint)

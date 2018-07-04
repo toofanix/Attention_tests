@@ -316,3 +316,22 @@ class AttentionDecoder(Recurrent):
         self.input_spec = [
             InputSpec(shape=(self.batch_size, self.timesteps, self.input_dim))]
         self.built = True
+
+    def call(self, x):
+        # capture entire sequence to be able to attend to it at each timestep
+        self.x_seq = x
+        self._uxpb = _time_distributed_dense(
+            self.x_seq, self.U_a, b=self.b_a,
+            input_dim=self.input_dim, timesteps=self.timesteps,
+            output_dim=self.units)
+
+        return super(AttentionDecoder, self).call(x)
+
+    def get_initial_state(self, inputs):
+        s0 = activations.tanh(K.dot(inputs[:, 0], self.W_s))
+        y0 = K.zeros_like(inputs)
+        y0 = K.sum(y0, axis=(1, 2))
+        y0 = K.expand_dims(y0)
+        y0 = K.tile(y0, [1, self.output_dim])
+
+        return [y0, s0]

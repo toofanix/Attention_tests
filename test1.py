@@ -182,4 +182,24 @@ class AttentionDecoder(Recurrent):
             super(AttentionDecoder, self).reset_states()
 
     self.states = [None, None]
-    
+
+    self.V_a = self.add_weight(shape=(self.units,),
+                               name='V_a',
+                               initializer=self.kernel_initizalizer,
+                               regularizer=self.kernel_regularizer,
+                               constraint=self.kernel_constraint)
+    self.W_a = self.add_weight(shape=(self.units, self.units),
+                               name='W_a',
+                               initializer=self.kernel_initializer,
+                               regularizer=self.kernel_regularizer,
+                               constraint=self.kernel_constraint)
+    self.U_a = self.add_weight(shape=(self.input_dim, self.units),
+                               name='U_a',
+                               initializer=self.kernel_initializer,
+                               regularizer=self.kernel_regularizer,
+                               constraint=self.kernel_constraint)
+    self.b_a = self.add_weight(shape=(self.units),
+                               name='b_a',
+                               initializer=self.bias_initializer,
+                               regularizer=self.bias_regularizer,
+                               constraint=self.bias_constraint)

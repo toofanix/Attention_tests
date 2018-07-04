@@ -175,6 +175,11 @@ class AttentionDecoder(Recurrent):
         self.name = name
         self.return_sequences = True
 
+    def build(self, input_shape):
+        self.batch_size, self.timesteps, self.input_dim = input_shape
 
+        if self.stateful:
+            super(AttentionDecoder, self).reset_states()
 
-        
+    self.states = [None, None]
+    

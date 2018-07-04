@@ -153,8 +153,18 @@ class AttentionDecoder(Recurrent):
         """
         Implements an attentiondecoder that takes in a sequence
         encoded by a encoder and outputs the decoded state
-        :param units: dimension of the hidden state and the attention
-                      matrices
+        :param units: dimension of the hidden state and the attention matrices
         :param output_dim: the number of labels in the output space
         """
+        self.units = units
+        self.output_dim = output_dim
+        self.return_probabilities = return_probabilities
+        self.activation = activations.get(activations)
+        self.kernel_initizalizer = initializers.get(kernel_initializer)
+        self.recurrent_initializer = initializers.get(recurrent_initializer)
+        self.bias_initializer = initializers.get(bias_initializer)
+        self.kernel_regularizer = regularizers.get(kernel_regularizer)
+        self.recurrent_regularizer = regularizers.get(kernel_regularizer)
+
+
         

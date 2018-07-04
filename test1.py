@@ -136,13 +136,25 @@ print('Accuracy  = {}'.format(correct * 100 / total))
 class AttentionDecoder(Recurrent):
 
     def __init__(self,
-    units,
-    output_dim,
-    activation='tanh',
-    return_probabilities=False,
-    name='AttentionDecoder',
-    kernel_initializer='glorot_uniform',
-    recurrent_initializer='orthogonal',
-    bias_initializer='zeros',
-    kernel_regularizer=None,
-    bias_regularizer=None,)
+                 units,
+                 output_dim,
+                 activation='tanh',
+                 return_probabilities=False,
+                 name='AttentionDecoder',
+                 kernel_initializer='glorot_uniform',
+                 recurrent_initializer='orthogonal',
+                 bias_initializer='zeros',
+                 kernel_regularizer=None,
+                 bias_regularizer=None,
+                 activity_regularizer=None,
+                 kernel_constraint=None,
+                 bias_constraint=None,
+                 **kwargs):
+        """
+        Implements an attentiondecoder that takes in a sequence
+        encoded by a encoder and outputs the decoded state
+        :param units: dimension of the hidden state and the attention
+                      matrices
+        :param output_dim: the number of labels in the output space
+        """
+        

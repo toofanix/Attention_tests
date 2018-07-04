@@ -256,4 +256,26 @@ class AttentionDecoder(Recurrent):
                                regularizer=self.recurrent_regularizer,
                                constraint=self.recurrent_constraint)
 
-                               
+    """
+    Matrices of proposal
+    """
+    self.C_p = self.add_weight(shape=(self.input_dim, self.units),
+    name='C_p',
+    initializer=self.recurrent_initializer,
+    regularizer=self.recurrent_regularizer,
+    constraint=self.recurrent_constraint)
+    self.U_p = self.add_weight(shape=(self.units, self.units),
+    name='U_p',
+    initializer=self.recurrent_initializer,
+    regularizer=self.recurrent_regularizer,
+    constraint=self.recurrent_constraint)
+    self.W_p = self.add_weight(shape=(self.output_dim, self.units),
+    name='W_p',
+    initializer=self.recurrent_initializer,
+    regularizer=self.recurrent_regularizer,
+    constraint=self.recurrent_constraint)
+    self.b_p=self.add_weight(shape=(self.units, ),
+    name='b_p',
+    initializer=self.bias_initializer,
+    regularizer=self.bias_regularizer,
+    constraint=self.bias_constraint)

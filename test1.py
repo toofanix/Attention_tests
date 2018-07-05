@@ -335,3 +335,17 @@ class AttentionDecoder(Recurrent):
         y0 = K.tile(y0, [1, self.output_dim])
 
         return [y0, s0]
+
+    def step(self, x, states):
+        ytm, stm = states
+        _stm = K.repeat(stm, self.timesteps)
+        _Wxstm = K.dot(_stm, self.W_a)
+
+        et = K.dot(activations.tanh(_Wxstm + self._uxpb),
+        K.expand_dims(self.V_a))
+        at = K.exp(et)
+        at_sum = K.sum(at, axis=1)
+        at_sum_repeated = K.repeat(at_sum, self.timesteps)
+        at /= at_sum_repeated
+
+        context = K.squeeze()

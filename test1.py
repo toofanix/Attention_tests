@@ -1,3 +1,8 @@
+
+"""
+code is taken from
+https://machinelearningmastery.com/encoder-decoder-attention-sequence-to-sequence-prediction-keras/
+"""
 from random import randint
 import numpy as np
 import typing

@@ -15,6 +15,7 @@ from keras import regularizers, constraints, initializers, activations
 from keras.layers.recurrent import Recurrent
 from keras.engine import InputSpec
 
+
 def generate_sequence(length: int, n_unique: int) -> list:
     return [randint(0, n_unique - 1) for _ in range(length)]
 

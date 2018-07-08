@@ -3,6 +3,8 @@ from keras import backend as K
 from keras import regularizers, constraints, initializers, activations
 from keras.layers.recurrent import Recurrent
 from keras.engine import InputSpec
+
+
 def _time_distributed_dense(x, w, b=None, dropout=None,
                             input_dim=None, output_dim=None,
                             timesteps=None, training=None):
@@ -48,7 +50,8 @@ def _time_distributed_dense(x, w, b=None, dropout=None,
     return x
 
 
-tfPrint = lambda d, T: tf.Print(input_=T, data=[T, tf.shape(T)], message=d)
+def tfPrint(d, T): return tf.Print(input_=T, data=[T, tf.shape(T)], message=d)
+
 
 class AttentionDecoder(Recurrent):
 
@@ -311,7 +314,7 @@ class AttentionDecoder(Recurrent):
             + self.b_p)
 
         # new hidden state:
-        st = (1-zt)*stm + zt * s_tp
+        st = (1 - zt) * stm + zt * s_tp
 
         yt = activations.softmax(
             K.dot(ytm, self.W_o)
